@@ -1,13 +1,17 @@
 import { Container } from "@mui/material";
-import { useContext } from "react";
-import ParcelContext from "../parcels-view/parcels-view"
+import { DataGrid } from '@mui/x-data-grid';
+
+const columns = [
+    { field: 'name', headerName: 'Name', width: 100 },
+    { field: 'area', headerName: 'Area', width: 80, type: 'number', valueFormatter: ({  value }) => `${Math.round(value)} m2` },
+  ];
+  
 
 function ParcelList(props) {
     return (
-        <Container>
-            <h5>dsds</h5>
-            <p>{JSON.stringify(props.parcel)} </p>   
-        </Container>
+        <div style={{ height: "85vh", width: '100%' }}>
+            <DataGrid rows={props.parcel} columns={columns} />  
+        </div>
     );  
   }
   

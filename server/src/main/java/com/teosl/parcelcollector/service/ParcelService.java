@@ -39,6 +39,9 @@ public class ParcelService {
     }
 
     public List<ParcelDto> getParcels(){
-        return this.landRepository.findAll().stream().map(ParcelDto::new).toList();
+        return this.landRepository.findAll().stream().map(ParcelDto::new).map((ParcelDto parcel) -> {
+            parcel.area = this.parcelGeomService.calcArea(parcel.geom);
+            return parcel;
+        }).toList();
     }
 }

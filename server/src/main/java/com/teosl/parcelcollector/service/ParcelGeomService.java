@@ -1,10 +1,17 @@
 package com.teosl.parcelcollector.service;
 
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKBReader;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -31,4 +38,23 @@ public class ParcelGeomService {
            throw e;
        }
     }
+
+    public double calcArea(Geometry geometry) {
+		if(geometry.isEmpty())
+			return 0;
+		
+		Point centroid = geometry.getCentroid();
+	    try {
+
+	    	CoordinateReferenceSystem sourceCRS = CRS.decode("AUTO2:42004,"+centroid.getX()+","+centroid.getY());
+			
+			MathTransform transform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, sourceCRS);
+	        Geometry projed = JTS.transform(geometry, transform);
+	        return projed.getArea();
+	    }catch (Exception e) {
+
+	    	e.printStackTrace();
+		}
+	    return 0d;
+	}
 }

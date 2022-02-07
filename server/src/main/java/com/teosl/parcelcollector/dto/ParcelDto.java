@@ -6,6 +6,7 @@ import com.teosl.parcelcollector.domain.*;
 import org.locationtech.jts.geom.Geometry;
 
 public class ParcelDto {
+    public Long id;
     public String name;
     public String description;
     public String geoId;
@@ -18,6 +19,7 @@ public class ParcelDto {
     public ParcelDto(){}
 
     public ParcelDto(Parcel parcel){
+        this.id = parcel.getId();
         this.name = parcel.getName();
         this.description = parcel.getDescription();
         this.geoId = parcel.getGeoId();
